@@ -2,7 +2,11 @@
 
 ## getting started
 
-This library is published for Scala 3, and ScalaJS. Currently, only the SNAPSHOT version.
+This library is published for Scala 3, and ScalaJS.
+
+Currently, only the SNAPSHOT version is available.
+
+### sprout
 
 ```scala
 val sproutVersion = "0.1.0-SNAPSHOT"
@@ -10,11 +14,22 @@ val sproutVersion = "0.1.0-SNAPSHOT"
 libraryDependencies ++= "com.lorandszakacs" %% "sprout" % sproutVersion
 ```
 
-And for the module which also depends on `cats-effect` and allows refining types into `F[_]: Sync` constraints, use:
+Depends on:
+
+* [cats-core](https://github.com/typelevel/cats) `2.3.1`
+
+### sprout-effect
+
+If you want to refine a type using a `F[_]: cats.effect.Sync` constraint, then depend on the module:
 
 ```scala
 libraryDependencies ++= "com.lorandszakacs" %% "sprout-effect" % sproutVersion
 ```
+
+Depends on:
+
+* [cats-core](https://github.com/typelevel/cats) `2.3.1`
+* [cats-effect](https://github.com/typelevel/cats-effect) `3.0.0-M5`
 
 ### snapshots
 
@@ -66,7 +81,7 @@ object TestSprout extends SproutNewType[String]
   with SproutNewType.SproutEq[String]
 ```
 
-## scala 2 support
+## scala 2 support (WIP)
 
 There exists a scala 2 implementation of roughly the same functionality using shapeless. There is no binary
 compatability between Scala 2 and Scala 3 versions, and source compatability is a goal, but not a guarantee. The Scala 2
