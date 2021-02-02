@@ -70,8 +70,8 @@ Test / scalaJSLinkerConfig ~= { _.withModuleKind(ModuleKind.CommonJSModule) }
 lazy val root = project
   .in(file("."))
   .aggregate(
-    sproutJVM,
-    `sprout-effectJVM`
+    sproutJVM
+    //`sprout-effectJVM`
     // sproutJS,
     // `sprout-effectJS`
   )
@@ -91,19 +91,20 @@ lazy val sprout = crossProject(JSPlatform, JVMPlatform)
 lazy val sproutJVM = sprout.jvm
 lazy val sproutJS  = sprout.js
 
-lazy val `sprout-effect` = crossProject(JSPlatform, JVMPlatform)
-  .settings(commonSettings, releaseSettings)
-  .settings(
-    name := "sprout-effect",
-    libraryDependencies ++= Seq(
-      "org.typelevel" %%% "cats-core"           % catsVersion       withSources (),
-      "org.typelevel" %%% "cats-effect"         % catsEffectVersion withSources (),
-      "org.typelevel" %%% "munit-cats-effect-3" % munitCatsEffectVersion      % Test withSources ()
-    )
-  )
-
-lazy val `sprout-effectJVM` = `sprout-effect`.jvm
-lazy val `sprout-effectJS`  = `sprout-effect`.js
+//TODO: enable once we need it
+//lazy val `sprout-effect` = crossProject(JSPlatform, JVMPlatform)
+//  .settings(commonSettings, releaseSettings)
+//  .settings(
+//    name := "sprout-effect",
+//    libraryDependencies ++= Seq(
+//      "org.typelevel" %%% "cats-core"           % catsVersion       withSources (),
+//      "org.typelevel" %%% "cats-effect"         % catsEffectVersion withSources (),
+//      "org.typelevel" %%% "munit-cats-effect-3" % munitCatsEffectVersion      % Test withSources ()
+//    )
+//  )
+//
+//lazy val `sprout-effectJVM` = `sprout-effect`.jvm
+//lazy val `sprout-effectJS`  = `sprout-effect`.js
 
 lazy val commonSettings = Seq(
   libraryDependencies ++= Seq(),
