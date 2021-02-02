@@ -22,12 +22,11 @@ import munit.CatsEffectSuite
 
 final class SproutNewTypeSuite extends CatsEffectSuite {
 
-  type TestSprout = TestSprout.T
-  object TestSprout extends SproutNewType[String]
+  private type TestSprout = TestSprout.T
+  private object TestSprout
+    extends SproutNewType[String]
     with SproutNewType.SproutShow[String]
     with SproutNewType.SproutEq[String]
-
-  
 
   test("sprout Eq") {
     val str = "testing eq"
