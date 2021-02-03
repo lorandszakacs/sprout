@@ -12,7 +12,7 @@ on:
     branches: ['*']
   push:
     branches: ['*']
-    tags: [v*, v*]
+    tags: [v*]
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -27,7 +27,7 @@ jobs:
       matrix:
         os: [ubuntu-latest]
         scala: [3.0.0-M3]
-        java: [adopt@1.8, adopt@1.11]
+        java: [adopt@1.8]
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout current branch (full)
@@ -53,13 +53,9 @@ jobs:
           key: ${{ runner.os }}-sbt-cache-v2-${{ hashFiles('**/*.sbt') }}-${{ hashFiles('project/build.properties') }}
 
       - name: Check that workflows are up to date
-        run: csbt ++${{ matrix.scala }} githubWorkflowCheck
+        run: sbt ++${{ matrix.scala }} githubWorkflowCheck
 
-      - name: Test
-        run: csbt ++${{ matrix.scala }} test
-
-      - name: Binary Compatibility Check
-        run: csbt ++${{ matrix.scala }} mimaReportBinaryIssues
+      - run: sbt ++${{ matrix.scala }} ci
 
       - name: Compress target directories
         run: tar cf targets.tar sprout-effect/jvm/target target sprout-effect/js/target sprout/jvm/target sprout/js/target project/target
@@ -73,7 +69,7 @@ jobs:
   publish:
     name: Publish Artifacts
     needs: [build]
-    if: github.event_name != 'pull_request' && (startsWith(github.ref, 'refs/tags/v'))
+    if: github.event_name != 'pull_request' && (startsWith(github.ref, 'refs/tags/v') || github.ref == 'refs/heads/main')
     strategy:
       matrix:
         os: [ubuntu-latest]
@@ -116,9 +112,4 @@ jobs:
       - name: Import signing key
         run: echo $PGP_SECRET | base64 -d | gpg --import
 
-      - env:
-          PGP_PASSPHRASE: ${{ secrets.PGP_PASSPHRASE }}
-          PGP_SECRET: ${{ secrets.PGP_SECRET }}
-          SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
-          SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
-        run: csbt ++${{ matrix.scala }} ci-release
+      - run: sbt ++${{ matrix.scala }} release

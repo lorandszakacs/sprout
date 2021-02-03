@@ -1,71 +1,73 @@
 import sbtcrossproject.{crossProject, CrossType}
 import sbtghactions.UseRef
 
+//=============================================================================
+//============================== build details ================================
+//=============================================================================
+
 addCommandAlias("github-gen", "githubWorkflowGenerate")
 addCommandAlias("github-check", "githubWorkflowCheck")
+Global / onChangedBuildSource := ReloadOnSourceChanges
 
-val Scala3 = "3.0.0-M3"
+val `Scala3.0.x` = "3.0.0-M3"
 
-enablePlugins(SonatypeCiReleasePlugin)
+//=============================================================================
+//============================ publishing details =============================
+//=============================================================================
 
-ThisBuild / publishFullName   := "Loránd Szakács"
-ThisBuild / publishGithubUser := "lorandszakacs"
-ThisBuild / organization      := "com.lorandszakacs"
-ThisBuild / baseVersion       := "0.1"
+ThisBuild / baseVersion  := "0.1"
+ThisBuild / organization := "com.lorandszakacs"
+ThisBuild / homepage     := Option(url("https://github.com/lorandszakacs/sprout"))
 
-ThisBuild / scalaVersion       := Scala3
-ThisBuild / crossScalaVersions := Seq(Scala3)
+ThisBuild / publishFullName := "Loránd Szakács"
 
-ThisBuild / versionIntroduced        := Map(
-  Scala3 -> "0.1.0"
-)
-
-ThisBuild / githubWorkflowSbtCommand := "csbt"
-
-ThisBuild / githubWorkflowJavaVersions := Seq("adopt@1.8", "adopt@1.11")
-
-ThisBuild / githubWorkflowBuild       := Seq(
-  WorkflowStep.Sbt(List("test"), name                   = Some("Test")),
-  WorkflowStep.Sbt(List("mimaReportBinaryIssues"), name = Some("Binary Compatibility Check"))
-)
-
-ThisBuild / spiewakCiReleaseSnapshots := true
-ThisBuild / spiewakMainBranches       := Seq("main")
-
-ThisBuild / githubWorkflowAddedJobs ++= Seq(
-  //FIXME: enable once scala 3 is fully supported by scalafmt
-  // WorkflowJob(
-  //   "scalafmt",
-  //   "Scalafmt",
-  //   githubWorkflowJobSetup.value.toList ::: List(
-  //     WorkflowStep.Sbt(List("scalafmtCheckAll"), name = Some("Scalafmt"))
-  //   ),
-  //   scalas = crossScalaVersions.value.toList
-  // )
-)
-
-ThisBuild / githubWorkflowTargetTags ++= Seq("v*")
-ThisBuild / githubWorkflowPublishTargetBranches := Seq(RefPredicate.StartsWith(Ref.Tag("v")))
-
-ThisBuild / githubWorkflowPublish := Seq(
-  WorkflowStep.Sbt(
-    List("ci-release"),
-    env = Map(
-      "PGP_PASSPHRASE"    -> "${{ secrets.PGP_PASSPHRASE }}",
-      "PGP_SECRET"        -> "${{ secrets.PGP_SECRET }}",
-      "SONATYPE_PASSWORD" -> "${{ secrets.SONATYPE_PASSWORD }}",
-      "SONATYPE_USERNAME" -> "${{ secrets.SONATYPE_USERNAME }}"
-    )
+ThisBuild / scmInfo := Option(
+  ScmInfo(
+    browseUrl  = url("https://github.com/lorandszakacs/sprout"),
+    connection = "git@github.com:lorandszakacs/sprout.git"
   )
 )
+
+/** I want my email. So I put this here. To reduce a few lines of code,
+  * the sbt-spiewak plugin generates this (except email) from these two settings:
+  * {{{
+  * ThisBuild / publishFullName   := "Loránd Szakács"
+  * ThisBuild / publishGithubUser := "lorandszakacs"
+  * }}}
+  */
+ThisBuild / developers := List(
+  Developer(
+    id    = "lorandszakacs",
+    name  = "Loránd Szakács",
+    email = "lorand.szakacs@protonmail.com",
+    url   = new java.net.URL("https://github.com/lorandszakacs")
+  )
+)
+
+ThisBuild / startYear  := Option(2021)
+ThisBuild / licenses   := List("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0"))
+
+//until we get to 1.0.0, we keep strictSemVer false
+ThisBuild / strictSemVer              := false
+ThisBuild / spiewakCiReleaseSnapshots := true
+ThisBuild / spiewakMainBranches       := List("main")
+ThisBuild / publishArtifact in Test   := false
+
+ThisBuild / scalaVersion       := `Scala3.0.x`
+ThisBuild / crossScalaVersions := List(`Scala3.0.x`)
+
+//required for binary compat checks
+ThisBuild / versionIntroduced := Map(
+  `Scala3.0.x` -> "0.1.0"
+)
+
+//=============================================================================
+//============================== Project details ==============================
+//=============================================================================
 
 val catsVersion            = "2.3.1"    // https://github.com/typelevel/cats/releases
 val catsEffectVersion      = "3.0.0-M5" // https://github.com/typelevel/cats-effect/releases
 val munitCatsEffectVersion = "0.13.0"   // https://github.com/typelevel/munit-cats-effect/releases
-
-Global / onChangedBuildSource := ReloadOnSourceChanges
-//required for munit, see: https://scalameta.org/munit/docs/getting-started.html#scalajs-setup
-Test / scalaJSLinkerConfig ~= { _.withModuleKind(ModuleKind.CommonJSModule) }
 
 lazy val root = project
   .in(file("."))
@@ -76,11 +78,11 @@ lazy val root = project
     `sprout-effectJS`
   )
   .enablePlugins(NoPublishPlugin)
-  .settings(commonSettings, releaseSettings)
+  .enablePlugins(SonatypeCiReleasePlugin)
+  .settings(commonSettings)
 
 lazy val sprout = crossProject(JSPlatform, JVMPlatform)
   .settings(commonSettings)
-  .settings(releaseSettings)
   .settings(
     name := "sprout",
     libraryDependencies ++= Seq(
@@ -97,7 +99,6 @@ lazy val sproutJS = sprout.js.settings(
 
 lazy val `sprout-effect` = crossProject(JSPlatform, JVMPlatform)
   .settings(commonSettings)
-  .settings(releaseSettings)
   .settings(
     name := "sprout-effect",
     libraryDependencies ++= Seq(
@@ -127,26 +128,3 @@ lazy val commonSettings = Seq(
     "-explain"
   )
 )
-
-lazy val releaseSettings = {
-  Seq(
-    publishArtifact in Test := false,
-    scmInfo                 := Some(
-      ScmInfo(
-        url("https://github.com/lorandszakacs/sprout"),
-        "git@github.com:lorandszakacs/sprout.git"
-      )
-    ),
-    homepage                := Some(url("https://github.com/lorandszakacs/sprout")),
-    licenses                := Seq("Apache-2.0" -> url("https://www.apache.org/licenses/LICENSE-2.0.html")),
-    startYear               := Some(2021),
-    developers              := List(
-      Developer(
-        "lorandszakacs",
-        "Loránd Szakács",
-        "lorand.szakacs@protonmail.com",
-        new java.net.URL("https://github.com/lorandszakacs")
-      )
-    )
-  )
-}
