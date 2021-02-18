@@ -65,17 +65,14 @@ ThisBuild / versionIntroduced := Map(
 //============================== Project details ==============================
 //=============================================================================
 
-val catsVersion            = "2.4.2"     // https://github.com/typelevel/cats/releases
-val catsEffectVersion      = "3.0.0-RC2" // https://github.com/typelevel/cats-effect/releases
-val munitCatsEffectVersion = "0.13.1"    // https://github.com/typelevel/munit-cats-effect/releases
+val catsVersion            = "2.4.2"  // https://github.com/typelevel/cats/releases
+val munitCatsEffectVersion = "0.13.1" // https://github.com/typelevel/munit-cats-effect/releases
 
 lazy val root = project
   .in(file("."))
   .aggregate(
     sproutJVM,
-    sproutJS,
-    `sprout-effectJVM`,
-    `sprout-effectJS`
+    sproutJS
   )
   .enablePlugins(NoPublishPlugin)
   .enablePlugins(SonatypeCiReleasePlugin)
@@ -94,23 +91,6 @@ lazy val sprout = crossProject(JSPlatform, JVMPlatform)
 lazy val sproutJVM = sprout.jvm
 
 lazy val sproutJS = sprout.js.settings(
-  test in Test := {} //FIXME: temporary until I can figure out the munit test Framework on JS bit
-)
-
-lazy val `sprout-effect` = crossProject(JSPlatform, JVMPlatform)
-  .settings(commonSettings)
-  .settings(
-    name := "sprout-effect",
-    libraryDependencies ++= Seq(
-      "org.typelevel" %%% "cats-core"           % catsVersion       withSources (),
-      "org.typelevel" %%% "cats-effect"         % catsEffectVersion withSources (),
-      "org.typelevel" %%% "munit-cats-effect-3" % munitCatsEffectVersion      % Test withSources ()
-    )
-  )
-
-lazy val `sprout-effectJVM` = `sprout-effect`.jvm
-
-lazy val `sprout-effectJS` = `sprout-effect`.js.settings(
   test in Test := {} //FIXME: temporary until I can figure out the munit test Framework on JS bit
 )
 
