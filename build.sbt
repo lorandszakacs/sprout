@@ -65,9 +65,9 @@ ThisBuild / versionIntroduced := Map(
 //============================== Project details ==============================
 //=============================================================================
 
-val catsVersion            = "2.4.2"    // https://github.com/typelevel/cats/releases
-val catsEffectVersion      = "3.0.0-M5" // https://github.com/typelevel/cats-effect/releases
-val munitCatsEffectVersion = "0.13.0"   // https://github.com/typelevel/munit-cats-effect/releases
+val catsVersion            = "2.4.2"     // https://github.com/typelevel/cats/releases
+val catsEffectVersion      = "3.0.0-RC1" // https://github.com/typelevel/cats-effect/releases
+val munitCatsEffectVersion = "0.13.0"    // https://github.com/typelevel/munit-cats-effect/releases
 
 lazy val root = project
   .in(file("."))
