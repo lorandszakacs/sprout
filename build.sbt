@@ -9,7 +9,7 @@ addCommandAlias("github-gen", "githubWorkflowGenerate")
 addCommandAlias("github-check", "githubWorkflowCheck")
 Global / onChangedBuildSource := ReloadOnSourceChanges
 
-val `Scala3.0.x` = "3.0.0-M3"
+val `Scala3.0.x` = "3.0.0-RC1"
 
 //=============================================================================
 //============================ publishing details =============================
