@@ -62,7 +62,7 @@ WIP: section WIP as library evolves.
 Define a new type as simply as this:
 
 ```scala
-  import sprout._
+  import sprout.*
 
 object TestSprout extends SproutNewType[String]
 
@@ -72,7 +72,7 @@ type TestSprout = TestSprout.T
 If you wish to add `cats.Show` and `cats.Eq` typeclasses, then you can extend the appropriate types:
 
 ```scala
-  import sprout._
+  import sprout.*
 
 type TestSprout = TestSprout.T
 

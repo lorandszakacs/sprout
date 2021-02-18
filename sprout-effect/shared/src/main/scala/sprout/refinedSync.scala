@@ -32,7 +32,7 @@ trait SproutRefinedSyncType[OldType] {
   opaque type T = OldType
   type Underlying = OldType
 
-  import cats.implicits._
+  import cats.implicits.*
   
   def refine[F[_]: Sync](o: OldType): F[OldType]
 

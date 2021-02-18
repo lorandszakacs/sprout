@@ -123,7 +123,7 @@ lazy val commonSettings = Seq(
   //  Flag -source set repeatedly
   //previous source flag set by one of the many plugins used
   scalacOptions := scalacOptions.value.filterNot(_.startsWith("-source:")) ++ Seq(
-    "-source:3.1",
+    "-source:future",
     "-explain-types",
     "-explain"
   )

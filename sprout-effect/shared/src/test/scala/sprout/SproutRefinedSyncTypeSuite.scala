@@ -16,8 +16,8 @@
 
 package sprout
 
-import cats.effect._
-import cats.effect.std._
+import cats.effect.*
+import cats.effect.std.*
 import munit.CatsEffectSuite
 
 final class SproutRefinedSyncTypeSuite extends CatsEffectSuite {
