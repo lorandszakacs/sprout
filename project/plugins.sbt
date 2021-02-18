@@ -1,5 +1,5 @@
 // https://github.com/djspiewak/sbt-spiewak/releases/
-addSbtPlugin("com.codecommit"     % "sbt-spiewak-sonatype"     % "0.20.2")
+addSbtPlugin("com.codecommit"     % "sbt-spiewak-sonatype"     % "0.20.3")
 // https://github.com/scalameta/sbt-scalafmt/releases
 addSbtPlugin("org.scalameta"      % "sbt-scalafmt"             % "2.4.2")
 // https://github.com/portable-scala/sbt-crossproject/releases
