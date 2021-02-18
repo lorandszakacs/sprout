@@ -118,13 +118,19 @@ lazy val commonSettings = Seq(
   libraryDependencies ++= Seq(),
   //required for munit, see: https://scalameta.org/munit/docs/getting-started.html#quick-start
   testFrameworks += new TestFramework("munit.Framework"),
-  //ensure that we have only a dotty project,
-  //remove the filter periodically to see if sbt warns about:
-  //  Flag -source set repeatedly
+  //  Flag -source and -encoding set repeatedly
   //previous source flag set by one of the many plugins used
-  scalacOptions := scalacOptions.value.filterNot(_.startsWith("-source:")) ++ Seq(
+  scalacOptions := scalacOptions.value
+    .filterNot(_.startsWith("-source:"))
+    .filterNot(_.startsWith("-encoding"))
+    .filterNot(_.startsWith("UTF-8"))
+    .toSet //eliminate possible duplicates upstream
+    .toSeq ++ Seq(
+    "-encoding",
+    "UTF-8",
     "-source:future",
-    "-explain-types",
-    "-explain"
+    "-language:strictEquality"
+    //"-explain-types",
+    //"-explain"
   )
 )
