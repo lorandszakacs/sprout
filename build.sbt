@@ -9,7 +9,8 @@ addCommandAlias("github-gen", "githubWorkflowGenerate")
 addCommandAlias("github-check", "githubWorkflowCheck")
 Global / onChangedBuildSource := ReloadOnSourceChanges
 
-val `Scala3.0.x` = "3.0.0-RC1"
+val Scala213  = "2.13.5"
+val Scala3RC1 = "3.0.0-RC1"
 
 //=============================================================================
 //============================ publishing details =============================
@@ -53,12 +54,13 @@ ThisBuild / spiewakCiReleaseSnapshots := true
 ThisBuild / spiewakMainBranches       := List("main")
 ThisBuild / Test / publishArtifact    := false
 
-ThisBuild / scalaVersion       := `Scala3.0.x`
-ThisBuild / crossScalaVersions := List(`Scala3.0.x`)
+ThisBuild / scalaVersion       := Scala213
+ThisBuild / crossScalaVersions := List(Scala213, Scala3RC1)
 
 //required for binary compat checks
 ThisBuild / versionIntroduced := Map(
-  `Scala3.0.x` -> "0.0.1"
+  Scala213  -> "0.0.1",
+  Scala3RC1 -> "0.0.1"
 )
 
 //=============================================================================
@@ -67,6 +69,7 @@ ThisBuild / versionIntroduced := Map(
 
 val catsVersion            = "2.4.2"  // https://github.com/typelevel/cats/releases
 val munitCatsEffectVersion = "0.13.1" // https://github.com/typelevel/munit-cats-effect/releases
+val shapelessVersion       = "2.3.3"  // used only for scala 2
 
 lazy val root = project
   .in(file("."))
@@ -89,7 +92,14 @@ lazy val sprout = crossProject(JSPlatform, JVMPlatform)
     libraryDependencies ++= Seq(
       "org.typelevel" %%% "cats-core"           % catsVersion  withSources (),
       "org.typelevel" %%% "munit-cats-effect-3" % munitCatsEffectVersion % Test withSources ()
-    ),
+    ) ++ (if (isDotty.value) {
+            Seq()
+          }
+          else {
+            Seq(
+              "com.chuusai" %%% "shapeless" % shapelessVersion withSources ()
+            )
+          }),
     //required for munit, see: https://scalameta.org/munit/docs/getting-started.html#quick-start
     testFrameworks += new TestFramework("munit.Framework")
   )
@@ -106,13 +116,32 @@ lazy val commonSettings = Seq(
     .filterNot(_.startsWith("-source:"))
     .filterNot(_.startsWith("-encoding"))
     .filterNot(_.startsWith("UTF-8"))
+    .filterNot(_.startsWith("-Ybackend-parallelism"))
     .toSet //eliminate possible duplicates upstream
     .toSeq ++ Seq(
     "-encoding",
-    "UTF-8",
-    "-source:future",
-    "-language:strictEquality"
-    //"-explain-types",
-    //"-explain"
-  )
+    "UTF-8"
+  ) ++ (if (isDotty.value) {
+          Seq(
+            "-source:future",
+            "-language:strictEquality"
+            //"-explain-types",
+            //"-explain"
+          )
+        }
+        else {
+          Seq()
+        }),
+  Compile / unmanagedSourceDirectories ++= {
+    val major = if (isDotty.value) "-3" else "-2"
+    List(CrossType.Pure, CrossType.Full).flatMap(
+      _.sharedSrcDir(baseDirectory.value, "main").toList.map(f => file(f.getPath + major))
+    )
+  },
+  Test / unmanagedSourceDirectories ++= {
+    val major = if (isDotty.value) "-3" else "-2"
+    List(CrossType.Pure, CrossType.Full).flatMap(
+      _.sharedSrcDir(baseDirectory.value, "test").toList.map(f => file(f.getPath + major))
+    )
+  }
 )

@@ -16,28 +16,50 @@
 
 package sprout
 
+import cats.implicits._
 import cats.MonadError
-import cats.effect.*
-import cats.effect.std.*
+import cats.effect._
+import cats.effect.std._
 import munit.CatsEffectSuite
 
-final class SproutSuite extends CatsEffectSuite {
+final class SproutSubSuite extends CatsEffectSuite {
 
   private type TestSprout = TestSprout.Type
 
   private object TestSprout
-    extends Sprout[String]
+    extends SproutSub[String]
     with SproutEq[String]
     with SproutShow[String]
     with SproutOrder[String]
 
-  private val str1 = "11111"
-  private val str2 = "22222"
-  private val ts1: TestSprout = TestSprout(str1)
-  private val ts2: TestSprout = TestSprout(str2)
+  private val str1: String     = "11111"
+  private val str2: String     = "22222"
+  private val ts1:  TestSprout = TestSprout(str1)
+  private val ts2:  TestSprout = TestSprout(str2)
+
+  test("compilation -- cannot assign String to TestSprout") {
+    val errs = compileErrors(
+      """
+         val s: TestSprout = "342"
+        """
+    )
+    IO.println(errs) >>
+      IO(
+        assert(
+          clue(errs.contains("type mismatch"))
+            && clue(errs.contains("found   : String"))
+            && clue(errs.contains("required: SproutSubSuite.this.TestSprout"))
+        )
+      )
+  }
 
   test("instance of") {
     IO(assert(ts1.isInstanceOf[String]))
+  }
+
+  test("asignable to base type") {
+    val s: String = ts1
+    IO(assert(s == str1))
   }
 
   test("NewType.symbolicName") {
@@ -46,7 +68,6 @@ final class SproutSuite extends CatsEffectSuite {
       _ <- IO(assert(clue(nt.symbolicName) == clue(TestSprout.symbolicName)))
       _ <- IO(assert(clue(nt.symbolicName) == clue("TestSprout")))
     } yield ()
-
   }
 
   test("SproutEq -- cats.Eq") {
