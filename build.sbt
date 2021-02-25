@@ -9,6 +9,7 @@ addCommandAlias("github-gen", "githubWorkflowGenerate")
 addCommandAlias("github-check", "githubWorkflowCheck")
 Global / onChangedBuildSource := ReloadOnSourceChanges
 
+val Scala212  = "2.12.13"
 val Scala213  = "2.13.5"
 val Scala3RC1 = "3.0.0-RC1"
 
@@ -54,11 +55,12 @@ ThisBuild / spiewakCiReleaseSnapshots := true
 ThisBuild / spiewakMainBranches       := List("main")
 ThisBuild / Test / publishArtifact    := false
 
-ThisBuild / scalaVersion       := Scala213
-ThisBuild / crossScalaVersions := List(Scala213, Scala3RC1)
+ThisBuild / scalaVersion       := Scala3RC1
+ThisBuild / crossScalaVersions := List(Scala3RC1, Scala213, Scala212)
 
 //required for binary compat checks
 ThisBuild / versionIntroduced := Map(
+  Scala212  -> "0.0.1",
   Scala213  -> "0.0.1",
   Scala3RC1 -> "0.0.1"
 )
