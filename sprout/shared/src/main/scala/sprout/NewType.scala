@@ -23,7 +23,7 @@ package sprout
  * boilerplate as possible in inter-op with 3rd party libraries,
  * and other classes.
  * 
- * @see [[sprout.Sprout.Show]] as an example. We can easily provide
+ * @see [[sprout.SproutShow]] as an example. We can easily provide
  *      a Show instance for N if the underlying representation has
  *      one. And it's opt in.
  *      
@@ -36,26 +36,10 @@ package sprout
  * @tparam N
  * N for new type. i.e. the type that ought to live only in the compiler
  */
-trait NewType[O, N] {
+trait NewType[O, N] extends OldType[O, N] {
   @inline def newType(o: O): N
-  @inline def oldType(n: N): O
-
-  /**
-   * Ought to be used only for pretty printing and debug messages,
-   * not intented to represent extremly precise and consistent
-   * values that can be relied on in mission critical code
-   * 
-   * @return
-   * e.g.
-   * ``
-   *  object TestValue extends Sprout[Int]
-   *  type TestValue = TestValue.Type
-   * ``
-   * returns TestValue
-   */
-  def symbolicName: String
 }
 
 object NewType {
-  def apply[O, N](using i: NewType[O, N]) = i
+  @inline def apply[O, N](using i: NewType[O, N]): NewType[O, N] = i
 }

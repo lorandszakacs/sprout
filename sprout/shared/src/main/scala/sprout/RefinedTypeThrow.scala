@@ -16,13 +16,8 @@
 
 package sprout
 
-import cats.MonadError
+type RefinedTypeThrow[O, N] = RefinedType[O, N, Throwable]
 
-trait RefinedType[O, N, E] extends OldType[O, N] {
-  @inline def newType[F[_]](o: O)(using m: MonadError[F, E]): F[N]
+object RefinedTypeThrow {
+    def apply[O, N](using i: RefinedType[O, N, Throwable]): RefinedTypeThrow[O, N] = i
 }
-
-object RefinedType {
-  @inline def apply[O, N, E](using i: RefinedType[O, N, E]): RefinedType[O, N, E] = i
-}
-

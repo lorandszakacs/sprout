@@ -16,6 +16,7 @@
 
 package sprout
 
+import cats.MonadError
 import cats.effect.*
 import cats.effect.std.*
 import munit.CatsEffectSuite
@@ -26,27 +27,35 @@ final class SproutSuite extends CatsEffectSuite {
 
   private object TestSprout
     extends Sprout[String]
-    with Sprout.Eq[String]
-    with Sprout.Show[String]
-    with Sprout.Order[String]
+    with SproutEq[String]
+    with SproutShow[String]
+    with SproutOrder[String]
 
   private val str1 = "11111"
   private val str2 = "22222"
   private val ts1: TestSprout = TestSprout(str1)
   private val ts2: TestSprout = TestSprout(str2)
 
-  test("Sprout.symbolicName") {
-    val nt: NewType[String, TestSprout] = NewType[String, TestSprout]
-    IO(assert(clue(nt.symbolicName) == "TestSprout"))
+  test("instance of") {
+    IO(assert(ts1.isInstanceOf[String]))
   }
 
-  test("Sprout.Eq -- cats.Eq") {
+  test("NewType.symbolicName") {
+    val nt: NewType[String, TestSprout] = NewType[String, TestSprout]
+    for {
+      _ <- IO(assert(clue(nt.symbolicName) == clue(TestSprout.symbolicName)))
+      _ <- IO(assert(clue(nt.symbolicName) == clue("TestSprout")))
+    } yield ()
+
+  }
+
+  test("SproutEq -- cats.Eq") {
     val catsEQ = cats.Eq[TestSprout]
 
     IO(assert(catsEQ.eqv(ts1, ts1)))
   }
 
-  test("Sprout.Order -- cats.Order") {
+  test("SproutOrder -- cats.Order") {
     val catsOrdStr = cats.Order[String]
     val catsOrd    = cats.Order[TestSprout]
 
@@ -57,7 +66,7 @@ final class SproutSuite extends CatsEffectSuite {
     } yield ()
   }
 
-  test("Sprout.Order -- scala.math.Ordering") {
+  test("SproutOrder -- scala.math.Ordering") {
     val scalaOrdStr = scala.math.Ordering[String]
     val scalaOrd    = scala.math.Ordering[TestSprout]
 
@@ -68,16 +77,16 @@ final class SproutSuite extends CatsEffectSuite {
     } yield ()
   }
 
-  test("Sprout.Eq -- scala.math.Equiv") {
+  test("SproutEq -- scala.math.Equiv") {
     val scalaMEquiv = scala.math.Equiv[TestSprout]
     IO(assert(scalaMEquiv.equiv(ts1, ts1)))
   }
 
-  test("Sprout.Eq -- scala strictEquality -- keep in mind this project is compiled w/ flag -language:strictEquality") {
+  test("SproutEq -- scala strictEquality -- keep in mind this project is compiled w/ flag -language:strictEquality") {
     IO(assert(ts1 == ts1))
   }
 
-  test("Sprout.Show") {
+  test("SproutShow") {
     val str  = "testing eq"
     val show = cats.Show[TestSprout]
     IO(assert(str == show.show(TestSprout(str))))

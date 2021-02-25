@@ -18,26 +18,24 @@ package sprout
 
 import cats.MonadError
 
-trait SproutRefined[O, E] {
-  opaque type Type = O
-  type OldType = O
+trait SproutRefined[O, E] extends Burry[O]{
+  override opaque type Type = O
 
+  /**
+   * By defining this method, you basically refine
+   * the underlying type. Then you can use the 
+   * apply, and newType methods to lift
+   */
   def refine[F[_]](o: O)(using m: MonadError[F, E]): F[O] 
   
   final def apply[F[_]](o: O)(using m: MonadError[F, E]): F[Type] = refine[F](o)
   @inline final def newType[F[_]](o: O)(using m: MonadError[F, E]): F[Type] = newTypeInstance.newType(o)
-  @inline final def oldType(n: Type): O = newTypeInstance.oldType(n)
 
   given newTypeInstance: RefinedType[O, Type, E] = _defaultRefinedType
-
-  /**
-   * Used for better error messages, and certain integrations.
-   */
-  protected def typeName: String = this.getClass.getSimpleName.stripSuffix("$")
 
   private lazy val _defaultRefinedType: RefinedType[O, Type, E] = new RefinedType[O, Type, E] {
     @inline override def newType[F[_]](o: O)(using m: MonadError[F, E]): F[Type] = apply[F](o)
     @inline override def oldType(n: Type): O = n
-    override val symbolicName: String = typeName.stripSuffix("$")
+    override val symbolicName: String = SproutRefined.this.symbolicName
   }
 }

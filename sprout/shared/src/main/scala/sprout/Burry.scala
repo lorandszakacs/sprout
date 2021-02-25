@@ -16,13 +16,22 @@
 
 package sprout
 
-import cats.MonadError
+/**
+ * Helper for various sprout constructors, because going
+ * from your new type to your old type is always the 
+ * same.
+ * 
+ * This is extremely handy when defining various contravariant
+ * functor typeclasses, e.g. various encoders, ordering, etc.
+ */
+trait Burry[O] {
+  opaque type Type = O
+  type Original = O
 
-trait RefinedType[O, N, E] extends OldType[O, N] {
-  @inline def newType[F[_]](o: O)(using m: MonadError[F, E]): F[N]
+  @inline final def oldType(n: Type): O = n
+
+ /**
+   * Used for better error messages, and certain integrations.
+   */
+  def symbolicName: String = this.getClass.getSimpleName.stripSuffix("$")
 }
-
-object RefinedType {
-  @inline def apply[O, N, E](using i: RefinedType[O, N, E]): RefinedType[O, N, E] = i
-}
-

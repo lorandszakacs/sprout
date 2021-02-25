@@ -15,7 +15,7 @@ val `Scala3.0.x` = "3.0.0-RC1"
 //============================ publishing details =============================
 //=============================================================================
 
-ThisBuild / baseVersion  := "0.1"
+ThisBuild / baseVersion  := "0.0.1"
 ThisBuild / organization := "com.lorandszakacs"
 ThisBuild / homepage     := Option(url("https://github.com/lorandszakacs/sprout"))
 
@@ -51,14 +51,14 @@ ThisBuild / licenses   := List("Apache-2.0" -> url("http://www.apache.org/licens
 ThisBuild / strictSemVer              := false
 ThisBuild / spiewakCiReleaseSnapshots := true
 ThisBuild / spiewakMainBranches       := List("main")
-ThisBuild / publishArtifact in Test   := false
+ThisBuild / Test / publishArtifact    := false
 
 ThisBuild / scalaVersion       := `Scala3.0.x`
 ThisBuild / crossScalaVersions := List(`Scala3.0.x`)
 
 //required for binary compat checks
 ThisBuild / versionIntroduced := Map(
-  `Scala3.0.x` -> "0.1.0"
+  `Scala3.0.x` -> "0.0.1"
 )
 
 //=============================================================================
@@ -91,7 +91,7 @@ lazy val sprout = crossProject(JSPlatform, JVMPlatform)
 lazy val sproutJVM = sprout.jvm
 
 lazy val sproutJS = sprout.js.settings(
-  test in Test := {} //FIXME: temporary until I can figure out the munit test Framework on JS bit
+  Test / test := {} //FIXME: temporary until I can figure out the munit test Framework on JS bit
 )
 
 lazy val commonSettings = Seq(
