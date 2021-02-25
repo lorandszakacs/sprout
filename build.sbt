@@ -80,26 +80,28 @@ lazy val root = project
 
 lazy val sprout = crossProject(JSPlatform, JVMPlatform)
   .settings(commonSettings)
+  .settings(dottyJsSettings(ThisBuild / crossScalaVersions))
+  .jsSettings(
+    scalaJSLinkerConfig ~= (_.withModuleKind(ModuleKind.CommonJSModule))
+  )
   .settings(
     name := "sprout",
     libraryDependencies ++= Seq(
       "org.typelevel" %%% "cats-core"           % catsVersion  withSources (),
       "org.typelevel" %%% "munit-cats-effect-3" % munitCatsEffectVersion % Test withSources ()
-    )
+    ),
+    //required for munit, see: https://scalameta.org/munit/docs/getting-started.html#quick-start
+    testFrameworks += new TestFramework("munit.Framework")
   )
 
-lazy val sproutJVM = sprout.jvm
-
-lazy val sproutJS = sprout.js.settings(
-  Test / test := {} //FIXME: temporary until I can figure out the munit test Framework on JS bit
+lazy val sproutJVM = sprout.jvm.settings(
+  javaOptions ++= Seq("-source", "1.8", "-target", "1.8")
 )
+lazy val sproutJS  = sprout.js
 
 lazy val commonSettings = Seq(
-  libraryDependencies ++= Seq(),
-  //required for munit, see: https://scalameta.org/munit/docs/getting-started.html#quick-start
-  testFrameworks += new TestFramework("munit.Framework"),
-  //  Flag -source and -encoding set repeatedly
-  //previous source flag set by one of the many plugins used
+  // Flag -source and -encoding set repeatedly
+  // previous source flag set by one of the many plugins used
   scalacOptions := scalacOptions.value
     .filterNot(_.startsWith("-source:"))
     .filterNot(_.startsWith("-encoding"))
