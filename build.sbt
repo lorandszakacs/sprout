@@ -119,6 +119,7 @@ lazy val commonSettings = Seq(
     .filterNot(_.startsWith("-encoding"))
     .filterNot(_.startsWith("UTF-8"))
     .filterNot(_.startsWith("-Ybackend-parallelism"))
+    .filterNot(_.startsWith("-bootclasspath"))
     .toSet //eliminate possible duplicates upstream
     .toSeq ++ Seq(
     "-encoding",
