@@ -115,26 +115,16 @@ lazy val commonSettings = Seq(
   // Flag -source and -encoding set repeatedly
   // previous source flag set by one of the many plugins used
   scalacOptions := scalacOptions.value
-    .filterNot(_.startsWith("-source:"))
-    .filterNot(_.startsWith("-encoding"))
-    .filterNot(_.startsWith("UTF-8"))
-    .filterNot(_.startsWith("-Ybackend-parallelism"))
-    .filterNot(_.startsWith("-bootclasspath"))
-    .toSet //eliminate possible duplicates upstream
-    .toSeq ++ Seq(
-    "-encoding",
-    "UTF-8"
-  ) ++ (if (isDotty.value) {
-          Seq(
-            "-source:future",
-            "-language:strictEquality"
-            //"-explain-types",
-            //"-explain"
-          )
-        }
-        else {
-          Seq()
-        }),
+    .filterNot(_.startsWith("-source:")) ++
+    (if (isDotty.value) {
+       Seq(
+         "-source:future",
+         "-language:strictEquality"
+       )
+     }
+     else {
+       Seq()
+     }),
   Compile / unmanagedSourceDirectories ++= {
     val major = if (isDotty.value) "-3" else "-2"
     List(CrossType.Pure, CrossType.Full).flatMap(
