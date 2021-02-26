@@ -18,7 +18,7 @@ package sprout
 
 //===========================================================================
 
-trait SproutEq[OldType](using ot: cats.Eq[OldType]) { this: Burry[OldType] =>
+trait SproutEq[OT](using ot: cats.Eq[OT]) { this: Burry[OT] =>
 
   given eqNewType: cats.Eq[this.Type] = new cats.Eq[this.Type] {
     override def eqv(x: SproutEq.this.Type, y: SproutEq.this.Type): Boolean = ot.eqv(SproutEq.this.oldType(x), SproutEq.this.oldType(y))
@@ -33,7 +33,7 @@ trait SproutEq[OldType](using ot: cats.Eq[OldType]) { this: Burry[OldType] =>
 
 //===========================================================================
 
-trait SproutOrder[OldType](using co: cats.Order[OldType]){this: Burry[OldType] =>
+trait SproutOrder[OT](using co: cats.Order[OT]) { this: Burry[OT] =>
   given orderNewType: cats.Order[this.Type] = new cats.Order[this.Type] {
     override def compare(x: SproutOrder.this.Type, y: SproutOrder.this.Type): Int = co.compare(SproutOrder.this.oldType(x), SproutOrder.this.oldType(y))
   }
@@ -46,7 +46,7 @@ trait SproutOrder[OldType](using co: cats.Order[OldType]){this: Burry[OldType] =
 
 //===========================================================================
 
-trait SproutShow[OldType](using ot: cats.Show[OldType]) { this: Burry[OldType] =>
+trait SproutShow[OT](using ot: cats.Show[OT]) { this: Burry[OT] =>
   given showNewType: cats.Show[this.Type] = new cats.Show[this.Type] {
     override def show(t: SproutShow.this.Type): String = ot.show(SproutShow.this.oldType(t))
   }
