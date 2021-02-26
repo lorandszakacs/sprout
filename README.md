@@ -7,15 +7,13 @@ This library is published for Scala 3, Scala 2 (with some caveats), and ScalaJS.
 ### sprout
 
 ```scala
-val sproutVersion = "0.0.1-SNAPSHOT"
-
-libraryDependencies ++= "com.lorandszakacs" %% "sprout" % sproutVersion
+libraryDependencies ++= "com.lorandszakacs" %% "sprout" % "0.0.1"
 ```
 
 Depends on:
 
 - [cats-core](https://github.com/typelevel/cats) `2.4.2`
-- [shapeless — for Scala 2](https://github.com/milessabin/shapeless/) `2.3.3`
+- [shapeless](https://github.com/milessabin/shapeless/) `2.3.3` — only for Scala 2
 
 ### snapshots
 
