@@ -37,7 +37,7 @@ final class SproutSubSuite extends CatsEffectSuite {
   private val ts1:  TestSprout = TestSprout(str1)
   private val ts2:  TestSprout = TestSprout(str2)
 
-  test("compilation -- cannot assign String to TestSprout") {
+  test("compilation — cannot assign String to TestSprout") {
     val errs = compileErrors(
       """
          val s: TestSprout = "342"
@@ -70,13 +70,13 @@ final class SproutSubSuite extends CatsEffectSuite {
     } yield ()
   }
 
-  test("SproutEq -- cats.Eq") {
+  test("SproutEq — cats.Eq") {
     val catsEQ = cats.Eq[TestSprout]
 
     IO(assert(catsEQ.eqv(ts1, ts1)))
   }
 
-  test("SproutOrder -- cats.Order") {
+  test("SproutOrder — cats.Order") {
     val catsOrdStr = cats.Order[String]
     val catsOrd    = cats.Order[TestSprout]
 
@@ -87,7 +87,7 @@ final class SproutSubSuite extends CatsEffectSuite {
     } yield ()
   }
 
-  test("SproutOrder -- scala.math.Ordering") {
+  test("SproutOrder — scala.math.Ordering") {
     val scalaOrdStr = scala.math.Ordering[String]
     val scalaOrd    = scala.math.Ordering[TestSprout]
 
@@ -98,12 +98,12 @@ final class SproutSubSuite extends CatsEffectSuite {
     } yield ()
   }
 
-  test("SproutEq -- scala.math.Equiv") {
+  test("SproutEq — scala.math.Equiv") {
     val scalaMEquiv = scala.math.Equiv[TestSprout]
     IO(assert(scalaMEquiv.equiv(ts1, ts1)))
   }
 
-  test("SproutEq -- scala strictEquality -- keep in mind this project is compiled w/ flag -language:strictEquality") {
+  test("SproutEq — scala strictEquality — keep in mind this project is compiled w/ flag -language:strictEquality") {
     IO(assert(ts1 == ts1))
   }
 

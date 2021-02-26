@@ -57,14 +57,14 @@ final class SproutRefinedSuite extends CatsEffectSuite {
     } yield ()
   }
 
-  test("SproutEq -- cats.Eq") {
+  test("SproutEq — cats.Eq") {
     val catsEQ = cats.Eq[TestSprout]
     for {
       ts1 <- ts1IO
     } yield assert(catsEQ.eqv(ts1, ts1))
   }
 
-  test("SproutOrder -- cats.Order") {
+  test("SproutOrder — cats.Order") {
     val catsOrdStr = cats.Order[String]
     val catsOrd    = cats.Order[TestSprout]
     for {
@@ -76,7 +76,7 @@ final class SproutRefinedSuite extends CatsEffectSuite {
     } yield ()
   }
 
-  test("SproutOrder -- scala.math.Ordering") {
+  test("SproutOrder — scala.math.Ordering") {
     val scalaOrdStr = scala.math.Ordering[String]
     val scalaOrd    = scala.math.Ordering[TestSprout]
 
@@ -89,14 +89,14 @@ final class SproutRefinedSuite extends CatsEffectSuite {
     } yield ()
   }
 
-  test("SproutEq -- scala.math.Equiv") {
+  test("SproutEq — scala.math.Equiv") {
     val scalaMEquiv = scala.math.Equiv[TestSprout]
     for {
       ts1 <- ts1IO
     } yield assert(scalaMEquiv.equiv(ts1, ts1))
   }
 
-  test("SproutEq -- scala strictEquality -- keep in mind this project is compiled w/ flag -language:strictEquality") {
+  test("SproutEq — scala strictEquality — keep in mind this project is compiled w/ flag -language:strictEquality") {
     for {
       ts1 <- ts1IO
     } yield assert(ts1 == ts1)
@@ -110,20 +110,20 @@ final class SproutRefinedSuite extends CatsEffectSuite {
     } yield assert(str == show.show(ts))
   }
 
-  test("SproutRefined -- failure -- TestSprout.apply") {
+  test("SproutRefined — failure — TestSprout.apply") {
     for {
       attempt <- ts3IO.attempt
     } yield assert(attempt.isLeft)
   }
 
-  test("SproutRefined -- failure -- RefinedTypeThrow.newType") {
+  test("SproutRefined — failure — RefinedTypeThrow.newType") {
     val rf: RefinedTypeThrow[String, TestSprout] = RefinedTypeThrow[String, TestSprout]
     for {
       attempt <- rf.newType[IO](str3).attempt
     } yield assert(attempt.isLeft)
   }
 
-  test("RefinedTypeThrow -- symbolicName") {
+  test("RefinedTypeThrow — symbolicName") {
     val rf: RefinedTypeThrow[String, TestSprout] = RefinedTypeThrow[String, TestSprout]
     val sn1 = rf.symbolicName
     val sn2 = TestSprout.symbolicName
