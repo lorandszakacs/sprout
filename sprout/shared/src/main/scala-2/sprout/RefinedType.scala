@@ -25,4 +25,3 @@ trait RefinedType[O, N, E] extends OldType[O, N] {
 object RefinedType {
   @inline def apply[O, N, E](implicit i: RefinedType[O, N, E]): RefinedType[O, N, E] = i
 }
-

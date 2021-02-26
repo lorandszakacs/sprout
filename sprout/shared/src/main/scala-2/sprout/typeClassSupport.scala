@@ -18,15 +18,15 @@ package sprout
 
 //===========================================================================
 
-trait SproutEq[OldType] { this: Burry[OldType] =>
+trait SproutEq[OT] { this: Burry[OT] =>
 
-  implicit def eqNewType(implicit ot: cats.Eq[OldType]): cats.Eq[this.Type] = new cats.Eq[this.Type] {
+  implicit def eqNewType(implicit ot: cats.Eq[OT]): cats.Eq[this.Type] = new cats.Eq[this.Type] {
 
     override def eqv(x: SproutEq.this.Type, y: SproutEq.this.Type): Boolean =
       ot.eqv(SproutEq.this.oldType(x), SproutEq.this.oldType(y))
   }
 
-  implicit def scalaEqNewType(implicit ot: cats.Eq[OldType]): scala.math.Equiv[this.Type] =
+  implicit def scalaEqNewType(implicit ot: cats.Eq[OT]): scala.math.Equiv[this.Type] =
     new scala.math.Equiv[this.Type] {
       override def equiv(x: SproutEq.this.Type, y: SproutEq.this.Type): Boolean = eqNewType.eqv(x, y)
     }
@@ -34,15 +34,15 @@ trait SproutEq[OldType] { this: Burry[OldType] =>
 
 //===========================================================================
 
-trait SproutOrder[OldType] { this: Burry[OldType] =>
+trait SproutOrder[OT] { this: Burry[OT] =>
 
-  implicit def orderNewType(implicit co: cats.Order[OldType]): cats.Order[this.Type] = new cats.Order[this.Type] {
+  implicit def orderNewType(implicit co: cats.Order[OT]): cats.Order[this.Type] = new cats.Order[this.Type] {
 
     override def compare(x: SproutOrder.this.Type, y: SproutOrder.this.Type): Int =
       co.compare(SproutOrder.this.oldType(x), SproutOrder.this.oldType(y))
   }
 
-  implicit def scalaOrderingNewType(implicit co: cats.Order[OldType]): scala.math.Ordering[this.Type] =
+  implicit def scalaOrderingNewType(implicit co: cats.Order[OT]): scala.math.Ordering[this.Type] =
     new scala.math.Ordering[this.Type] {
       override def compare(x: SproutOrder.this.Type, y: SproutOrder.this.Type): Int = orderNewType.compare(x, y)
     }
@@ -51,9 +51,9 @@ trait SproutOrder[OldType] { this: Burry[OldType] =>
 
 //===========================================================================
 
-trait SproutShow[OldType] { this: Burry[OldType] =>
+trait SproutShow[OT] { this: Burry[OT] =>
 
-  implicit def showNewType(implicit ot: cats.Show[OldType]): cats.Show[this.Type] = new cats.Show[this.Type] {
+  implicit def showNewType(implicit ot: cats.Show[OT]): cats.Show[this.Type] = new cats.Show[this.Type] {
     override def show(t: SproutShow.this.Type): String = ot.show(SproutShow.this.oldType(t))
   }
 }

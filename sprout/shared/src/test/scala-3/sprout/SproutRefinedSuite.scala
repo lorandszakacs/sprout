@@ -17,9 +17,7 @@
 package sprout
 
 import cats.implicits.*
-import cats.MonadError
 import cats.effect.*
-import cats.effect.std.*
 import munit.CatsEffectSuite
 
 final class SproutRefinedSuite extends CatsEffectSuite {

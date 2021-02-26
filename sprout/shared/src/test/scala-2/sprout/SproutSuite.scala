@@ -17,9 +17,7 @@
 package sprout
 
 import cats.implicits._
-import cats.MonadError
 import cats.effect._
-import cats.effect.std._
 import munit.CatsEffectSuite
 
 final class SproutSuite extends CatsEffectSuite {
@@ -53,7 +51,6 @@ final class SproutSuite extends CatsEffectSuite {
         )
       )
   }
-
 
   test("compilation — cannot assign String to TestSprout") {
     val errs = compileErrors(

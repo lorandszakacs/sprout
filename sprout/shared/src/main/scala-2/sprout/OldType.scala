@@ -23,19 +23,18 @@ package sprout
 trait OldType[O, N] {
   @inline def oldType(n: N): O
 
- /**
-   * Ought to be used only for pretty printing and debug messages,
-   * not intented to represent extremly precise and consistent
-   * values that can be relied on in mission critical code
-   * 
-   * @return
-   * e.g.
-   * ``
-   *  object TestValue extends Sprout[Int] //which extends OldType
-   *  type TestValue = TestValue.Type
-   * ``
-   * returns TestValue
-   */
+  /** Ought to be used only for pretty printing and debug messages,
+    * not intented to represent extremly precise and consistent
+    * values that can be relied on in mission critical code
+    *
+    * @return
+    * e.g.
+    * ``
+    *  object TestValue extends Sprout[Int]
+    *  type TestValue = TestValue.Type
+    * ``
+    * returns "TestValue"
+    */
   def symbolicName: String
 }
 
