@@ -9,7 +9,7 @@ addCommandAlias("github-gen", "githubWorkflowGenerate")
 addCommandAlias("github-check", "githubWorkflowCheck")
 Global / onChangedBuildSource := ReloadOnSourceChanges
 
-val Scala212  = "2.12.13"
+val Scala212  = "2.13.5"
 val Scala213  = "2.13.5"
 val Scala3RC1 = "3.0.0-RC1"
 
