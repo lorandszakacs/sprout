@@ -12,7 +12,7 @@ Global / onChangedBuildSource := ReloadOnSourceChanges
 val Scala212  = "2.12.13"
 val Scala213  = "2.13.5"
 val Scala3RC1 = "3.0.0-RC1"
-val Scala3RC1 = "3.0.0-RC2"
+val Scala3RC2 = "3.0.0-RC2"
 
 //=============================================================================
 //============================ publishing details =============================
@@ -70,10 +70,11 @@ ThisBuild / versionIntroduced := Map(
 //=============================================================================
 //============================== Project details ==============================
 //=============================================================================
-
-val catsVersion            = "2.5.0"  // https://github.com/typelevel/cats/releases
-val munitCatsEffectVersion = "0.13.1" // https://github.com/typelevel/munit-cats-effect/releases
-val shapelessVersion       = "2.3.3"  // used only for scala 2
+// format: off
+val catsVersion                = "2.5.0"      // https://github.com/typelevel/cats/releases
+val munitCatsEffectVersion     = "1.0.1"      // https://github.com/typelevel/munit-cats-effect/releases
+val shapelessVersion           = "2.3.3"      // used only for scala 2
+// format: on
 
 lazy val root = project
   .in(file("."))

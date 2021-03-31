@@ -17,6 +17,7 @@
 package sprout
 
 import cats.implicits.*
+import cats.MonadThrow
 import cats.effect.*
 import munit.CatsEffectSuite
 
