@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 # unreleased
 
+# 0.0.2
+
+New scala versions:
+- `3.0.0-RC2`
+
 Dependency upgrades:
 - [cats-core](https://github.com/typelevel/cats) `2.5.0`
 
