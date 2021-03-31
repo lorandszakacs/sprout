@@ -52,7 +52,7 @@ ThisBuild / licenses   := List("Apache-2.0" -> url("http://www.apache.org/licens
 
 //until we get to 1.0.0, we keep strictSemVer false
 ThisBuild / strictSemVer              := false
-ThisBuild / spiewakCiReleaseSnapshots := true
+ThisBuild / spiewakCiReleaseSnapshots := false
 ThisBuild / spiewakMainBranches       := List("main")
 ThisBuild / Test / publishArtifact    := false
 
