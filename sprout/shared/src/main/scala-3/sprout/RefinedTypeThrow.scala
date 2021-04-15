@@ -19,5 +19,5 @@ package sprout
 type RefinedTypeThrow[O, N] = RefinedType[O, N, Throwable]
 
 object RefinedTypeThrow {
-    def apply[O, N](using i: RefinedType[O, N, Throwable]): RefinedTypeThrow[O, N] = i
+  def apply[O, N](using i: RefinedType[O, N, Throwable]): RefinedTypeThrow[O, N] = i
 }

@@ -16,31 +16,30 @@
 
 package sprout
 
-/**
- * Intended to be mixed into an object, or in certain cases a class,
- * for them to act as the containers and constructors for your 
- * new type.
- * 
- * e.g.
- * 
- *{{{
- *   object FirstName extends Sprout[String]
- *   type FirstName = FirstName.Type
- *}}}
- * @tparam O
- */
+/** Intended to be mixed into an object, or in certain cases a class,
+  * for them to act as the containers and constructors for your
+  * new type.
+  *
+  * e.g.
+  *
+  * {{{
+  *   object FirstName extends Sprout[String]
+  *   type FirstName = FirstName.Type
+  * }}}
+  * @tparam O
+  */
 trait Sprout[O] extends Burry[O] {
   override opaque type Type = O
-  
+
   def apply(o: O): Type = o
-  
+
   @inline final def newType(o: O): Type = newTypeInstance.newType(o)
 
   given newTypeInstance: NewType[O, Type] = _defaultNewType
-  
+
   private lazy val _defaultNewType: NewType[O, Type] = new NewType[O, Type] {
-    @inline override def newType(o: O): Type = apply(o)
-    @inline override def oldType(n: Type): O = n
+    @inline override def newType(o: O):    Type = apply(o)
+    @inline override def oldType(n: Type): O    = n
     override val symbolicName: String = Sprout.this.symbolicName
   }
 }
