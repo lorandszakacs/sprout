@@ -16,22 +16,20 @@
 
 package sprout
 
-/**
- * Helper for various sprout constructors, because going
- * from your new type to your old type is always the 
- * same.
- * 
- * This is extremely handy when defining various contravariant
- * functor typeclasses, e.g. various encoders, ordering, etc.
- */
+/** Helper for various sprout constructors, because going
+  * from your new type to your old type is always the
+  * same.
+  *
+  * This is extremely handy when defining various contravariant
+  * functor typeclasses, e.g. various encoders, ordering, etc.
+  */
 trait Burry[O] {
   opaque type Type = O
-  type Original = O
+  type Original    = O
 
   @inline final def oldType(n: Type): O = n
 
- /**
-   * Used for better error messages, and certain integrations.
-   */
+  /** Used for better error messages, and certain integrations.
+    */
   def symbolicName: String = this.getClass.getSimpleName.stripSuffix("$")
 }
