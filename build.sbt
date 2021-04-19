@@ -11,14 +11,14 @@ Global / onChangedBuildSource := ReloadOnSourceChanges
 
 val Scala212  = "2.12.13"
 val Scala213  = "2.13.5"
-val Scala3RC1 = "3.0.0-RC1"
 val Scala3RC2 = "3.0.0-RC2"
+val Scala3RC3 = "3.0.0-RC3"
 
 //=============================================================================
 //============================ publishing details =============================
 //=============================================================================
 
-ThisBuild / baseVersion  := "0.0.2"
+ThisBuild / baseVersion  := "0.0.3"
 ThisBuild / organization := "com.lorandszakacs"
 ThisBuild / homepage     := Option(url("https://github.com/lorandszakacs/sprout"))
 
@@ -56,15 +56,16 @@ ThisBuild / spiewakCiReleaseSnapshots := false
 ThisBuild / spiewakMainBranches       := List("main")
 ThisBuild / Test / publishArtifact    := false
 
-ThisBuild / scalaVersion       := Scala3RC1
-ThisBuild / crossScalaVersions := List(Scala3RC2, Scala3RC1, Scala213, Scala212)
+ThisBuild / scalaVersion       := Scala3RC3
+ThisBuild / crossScalaVersions := List(Scala3RC3, Scala3RC2, Scala213, Scala212)
 
 //required for binary compat checks
 ThisBuild / versionIntroduced := Map(
-  Scala212  -> "0.0.1",
-  Scala213  -> "0.0.1",
-  Scala3RC1 -> "0.0.1",
-  Scala3RC2 -> "0.0.2"
+  Scala212    -> "0.0.1",
+  Scala213    -> "0.0.1",
+  "3.0.0-RC1" -> "0.0.1",
+  Scala3RC2   -> "0.0.2",
+  Scala3RC3   -> "0.0.3"
 )
 
 //=============================================================================
@@ -104,9 +105,7 @@ lazy val sprout = crossProject(JSPlatform, JVMPlatform)
             Seq(
               "com.chuusai" %%% "shapeless" % shapelessVersion withSources ()
             )
-          }),
-    //required for munit, see: https://scalameta.org/munit/docs/getting-started.html#quick-start
-    testFrameworks += new TestFramework("munit.Framework")
+          })
   )
 
 lazy val sproutJVM = sprout.jvm.settings(
