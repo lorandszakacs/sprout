@@ -7,17 +7,38 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 # unreleased
 
+### new scala versions:
+
+- `3.0.0-RC3` — JVM, and JS
+
+### dropped scala versions:
+
+- `3.0.0-RC1`
+
+### dependency upgrades:
+
+- [cats-core](https://github.com/typelevel/cats) `2.6.0`
+- [shapeless](https://github.com/milessabin/shapeless) `2.3.4` — only used for Scala 2
+
+### internals:
+
+- replace `munit-cats-effect-3` w/ simple `munit`
+- share the same tests between Scala 2 + 3 - huge win for reliability
+
 # 0.0.2
 
-New scala versions:
-- `3.0.0-RC2`
+### new scala versions:
 
-Dependency upgrades:
+- `3.0.0-RC2` — JVM, and JS
+
+### dependency upgrades:
+
 - [cats-core](https://github.com/typelevel/cats) `2.5.0`
 
 # 0.0.1
 
-Dependencies:
+### dependencies:
+
 - [cats-core](https://github.com/typelevel/cats) `2.4.2`
 - [shapeless](https://github.com/milessabin/shapeless) `2.3.3` — only for Scala 2
 

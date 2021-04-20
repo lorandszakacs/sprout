@@ -16,13 +16,12 @@
 
 package sprout
 
+import scala.util.Try
 import cats.MonadThrow
-import cats.implicits._
-import cats.effect._
-import munit.CatsEffectSuite
 
-final class SproutRefinedSuite extends CatsEffectSuite {
+final class SproutRefinedSuite extends munit.FunSuite {
 
+  private val errMessage = "Invalid sprout string"
   private type TestSprout = TestSprout.Type
 
   private object TestSprout
@@ -32,47 +31,43 @@ final class SproutRefinedSuite extends CatsEffectSuite {
     with SproutOrder[String] {
 
     override def refine[F[_]: MonadThrow](o: String): F[String] =
-      if (o.contains("sprout")) o.pure[F] else new RuntimeException("Invalid sprout string").raiseError[F, String]
+      if (o.contains("sprout")) MonadThrow[F].pure(o)
+      else MonadThrow[F].raiseError[String](new RuntimeException(errMessage))
   }
 
   private val str1 = "11111-sprout"
   private val str2 = "22222-sprout"
-  private val str3 = "33333"
-  private val ts1IO: IO[TestSprout] = TestSprout[IO](str1)
-  private val ts2IO: IO[TestSprout] = TestSprout[IO](str2)
-  private val ts3IO: IO[TestSprout] = TestSprout[IO](str3)
+  private val str3 = "33333-failed"
+  private val ts1F: Try[TestSprout] = TestSprout[Try](str1)
+  private val ts2F: Try[TestSprout] = TestSprout[Try](str2)
+  private val ts3F: Try[TestSprout] = TestSprout[Try](str3)
 
   test("instance of") {
-    for {
-      ts1 <- ts1IO
-    } yield assert(ts1.isInstanceOf[String])
+    ts1F.map(ts1 => assert(ts1.isInstanceOf[String], "sprout was not its underlying type")).get
   }
 
   test("RefinedType.symbolicName") {
     val nt: RefinedTypeThrow[String, TestSprout] = RefinedTypeThrow[String, TestSprout]
-    for {
-      _ <- IO(assert(clue(nt.symbolicName) == clue(TestSprout.symbolicName)))
-      _ <- IO(assert(clue(nt.symbolicName) == clue("TestSprout")))
-    } yield ()
+    assertEquals(clue(nt.symbolicName), clue(TestSprout.symbolicName))
+    assertEquals(clue(nt.symbolicName), clue("TestSprout"))
   }
 
   test("SproutEq — cats.Eq") {
     val catsEQ = cats.Eq[TestSprout]
-    for {
-      ts1 <- ts1IO
-    } yield assert(catsEQ.eqv(ts1, ts1))
+    ts1F.map(ts1 => assert(catsEQ.eqv(ts1, ts1), s"cats.Eq.eqv($ts1, $ts1)")).get
   }
 
   test("SproutOrder — cats.Order") {
     val catsOrdStr = cats.Order[String]
     val catsOrd    = cats.Order[TestSprout]
-    for {
-      ts1 <- ts1IO
-      ts2 <- ts2IO
-      _   <- IO(assert(catsOrd.compare(ts1, ts1) == catsOrdStr.compare(str1, str1)))
-      _   <- IO(assert(catsOrd.compare(ts1, ts2) == catsOrdStr.compare(str1, str2)))
-      _   <- IO(assert(catsOrd.compare(ts2, ts1) == catsOrdStr.compare(str2, str1)))
+    val t          = for {
+      ts1 <- ts1F
+      ts2 <- ts2F
+      _ = assertEquals(catsOrd.compare(ts1, ts1), catsOrdStr.compare(str1, str1))
+      _ = assertEquals(catsOrd.compare(ts1, ts2), catsOrdStr.compare(str1, str2))
+      _ = assertEquals(catsOrd.compare(ts2, ts1), catsOrdStr.compare(str2, str1))
     } yield ()
+    t.get
   }
 
   test("SproutOrder — scala.math.Ordering") {
@@ -80,52 +75,45 @@ final class SproutRefinedSuite extends CatsEffectSuite {
     val scalaOrd    = scala.math.Ordering[TestSprout]
 
     for {
-      ts1 <- ts1IO
-      ts2 <- ts2IO
-      _   <- IO(assert(scalaOrd.compare(ts1, ts1) == scalaOrdStr.compare(str1, str1)))
-      _   <- IO(assert(scalaOrd.compare(ts1, ts2) == scalaOrdStr.compare(str1, str2)))
-      _   <- IO(assert(scalaOrd.compare(ts2, ts1) == scalaOrdStr.compare(str2, str1)))
+      ts1 <- ts1F
+      ts2 <- ts2F
+      _ = assertEquals(scalaOrd.compare(ts1, ts1), scalaOrdStr.compare(str1, str1))
+      _ = assertEquals(scalaOrd.compare(ts1, ts2), scalaOrdStr.compare(str1, str2))
+      _ = assertEquals(scalaOrd.compare(ts2, ts1), scalaOrdStr.compare(str2, str1))
     } yield ()
   }
 
   test("SproutEq — scala.math.Equiv") {
     val scalaMEquiv = scala.math.Equiv[TestSprout]
-    for {
-      ts1 <- ts1IO
-    } yield assert(scalaMEquiv.equiv(ts1, ts1))
+    ts1F.map(ts1 => assert(scalaMEquiv.equiv(ts1, ts1))).get
   }
 
   test("SproutEq — scala strictEquality — keep in mind this project is compiled w/ flag -language:strictEquality") {
-    for {
-      ts1 <- ts1IO
-    } yield assert(ts1 == ts1)
+    ts1F.map(ts1 => assert(ts1 == ts1)).get
   }
 
   test("SproutShow") {
     val str  = "testing-show-sprout"
     val show = cats.Show[TestSprout]
-    for {
-      ts <- TestSprout[IO](str)
+    val t    = for {
+      ts <- TestSprout[Try](str)
     } yield assert(str == show.show(ts))
+    t.get
   }
 
   test("SproutRefined — failure — TestSprout.apply") {
-    for {
-      attempt <- ts3IO.attempt
-    } yield assert(attempt.isLeft)
+    interceptMessage[RuntimeException](errMessage)(ts3F.get)
   }
 
   test("SproutRefined — failure — RefinedTypeThrow.newType") {
     val rf: RefinedTypeThrow[String, TestSprout] = RefinedTypeThrow[String, TestSprout]
-    for {
-      attempt <- rf.newType[IO](str3).attempt
-    } yield assert(attempt.isLeft)
+    interceptMessage[RuntimeException](errMessage)(rf.newType[Try](str3).get)
   }
 
   test("RefinedTypeThrow — symbolicName") {
     val rf: RefinedTypeThrow[String, TestSprout] = RefinedTypeThrow[String, TestSprout]
     val sn1 = rf.symbolicName
     val sn2 = TestSprout.symbolicName
-    IO(assert(sn1 == sn2))
+    assertEquals(sn1, sn2)
   }
 }
