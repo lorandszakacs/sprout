@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 # unreleased
 
+# 0.0.3
+
+Maintenance release. No breaking changes, source, or binary.
+
 ### new scala versions:
 
 - `3.0.0-RC3` — JVM, and JS
