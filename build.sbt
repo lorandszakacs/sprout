@@ -72,9 +72,9 @@ ThisBuild / versionIntroduced := Map(
 //============================== Project details ==============================
 //=============================================================================
 // format: off
-val catsVersion                = "2.6.0"      // https://github.com/typelevel/cats/releases
-val munitCatsEffectVersion     = "1.0.1"      // https://github.com/typelevel/munit-cats-effect/releases
-val shapelessVersion           = "2.3.4"      // used only for scala 2
+val catsV        = "2.6.0"      // https://github.com/typelevel/cats/releases
+val munitV       = "1.0.1"      // https://github.com/scalameta/munit/releases
+val shapelessV   = "2.3.4"      // https://github.com/milessabin/shapeless/releases
 // format: on
 
 lazy val root = project
@@ -96,8 +96,10 @@ lazy val sprout = crossProject(JSPlatform, JVMPlatform)
   .settings(
     name := "sprout",
     libraryDependencies ++= Seq(
-      "org.typelevel" %%% "cats-core"           % catsVersion  withSources (),
-      "org.typelevel" %%% "munit-cats-effect-3" % munitCatsEffectVersion % Test withSources ()
+      // format: off
+      "org.typelevel" %%% "cats-core"  % catsV         withSources(),
+      "org.scalameta" %%% "munit-cats-effect-3"      % munitV % Test withSources()
+      // format: on
     ) ++ (if (isDotty.value) {
             Seq()
           }
