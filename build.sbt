@@ -72,7 +72,7 @@ ThisBuild / versionIntroduced := Map(
 //============================== Project details ==============================
 //=============================================================================
 // format: off
-val catsVersion                = "2.5.0"      // https://github.com/typelevel/cats/releases
+val catsVersion                = "2.6.0"      // https://github.com/typelevel/cats/releases
 val munitCatsEffectVersion     = "1.0.1"      // https://github.com/typelevel/munit-cats-effect/releases
 val shapelessVersion           = "2.3.4"      // used only for scala 2
 // format: on
