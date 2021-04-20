@@ -5,8 +5,8 @@ import sbtghactions.UseRef
 //============================== build details ================================
 //=============================================================================
 
-addCommandAlias("github-gen", "githubWorkflowGenerate")
-addCommandAlias("github-check", "githubWorkflowCheck")
+addCommandAlias("format", ";scalafmtSbt;scalafmtConfig;scalafmtAll")
+
 Global / onChangedBuildSource := ReloadOnSourceChanges
 
 val Scala212  = "2.12.13"

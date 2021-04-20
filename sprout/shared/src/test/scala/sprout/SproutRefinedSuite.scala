@@ -40,7 +40,7 @@ final class SproutRefinedSuite extends munit.FunSuite {
   private val str3 = "33333-failed"
   private val ts1F: Try[TestSprout] = TestSprout[Try](str1)
   private val ts2F: Try[TestSprout] = TestSprout[Try](str2)
-  private val ts3F:  Try[TestSprout] = TestSprout[Try](str3)
+  private val ts3F: Try[TestSprout] = TestSprout[Try](str3)
 
   test("instance of") {
     ts1F.map(ts1 => assert(ts1.isInstanceOf[String], "sprout was not its underlying type")).get
