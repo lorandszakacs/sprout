@@ -73,7 +73,7 @@ ThisBuild / versionIntroduced := Map(
 //=============================================================================
 // format: off
 val catsV        = "2.6.0"      // https://github.com/typelevel/cats/releases
-val munitV       = "1.0.1"      // https://github.com/scalameta/munit/releases
+val munitV       = "0.7.25"     // https://github.com/scalameta/munit/releases
 val shapelessV   = "2.3.4"      // https://github.com/milessabin/shapeless/releases
 // format: on
 
@@ -98,16 +98,14 @@ lazy val sprout = crossProject(JSPlatform, JVMPlatform)
     libraryDependencies ++= Seq(
       // format: off
       "org.typelevel" %%% "cats-core"  % catsV         withSources(),
-      "org.scalameta" %%% "munit-cats-effect-3"      % munitV % Test withSources()
+      "org.scalameta" %%% "munit"      % munitV % Test withSources()
       // format: on
-    ) ++ (if (isDotty.value) {
-            Seq()
-          }
-          else {
+    ) ++ (if (isDotty.value)
+            Seq.empty
+          else
             Seq(
-              "com.chuusai" %%% "shapeless" % shapelessVersion withSources ()
-            )
-          })
+              "com.chuusai" %%% "shapeless" % shapelessV withSources ()
+            ))
   )
 
 lazy val sproutJVM = sprout.jvm.settings(

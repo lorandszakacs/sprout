@@ -16,15 +16,12 @@
 
 package sprout
 
-import cats.effect.*
-import munit.CatsEffectSuite
-
-final class SproutSubSuite extends CatsEffectSuite {
+final class SproutSuite extends munit.FunSuite {
 
   private type TestSprout = TestSprout.Type
 
   private object TestSprout
-    extends SproutSub[String]
+    extends Sprout[String]
     with SproutEq[String]
     with SproutShow[String]
     with SproutOrder[String]
@@ -34,82 +31,91 @@ final class SproutSubSuite extends CatsEffectSuite {
   private val ts1: TestSprout = TestSprout(str1)
   private val ts2: TestSprout = TestSprout(str2)
 
+  test("compilation — cannot assign TestSprout to String") {
+    val errs = compileErrors(
+      """
+         val s: TestSprout = ???
+         val x: String = s
+        """
+    )
+    assert(
+      clue(errs.contains("type mismatch"))
+        && clue(errs.contains("found   : SproutSuite.this.TestSprout"))
+        && clue(errs.contains("required: String")),
+      clue = s"""|Actual compiler errors were (sans the -----):
+                 |-----
+                 |$errs
+                 |-----
+                 |""".stripMargin
+    )
+  }
+
   test("compilation — cannot assign String to TestSprout") {
     val errs = compileErrors(
       """
          val s: TestSprout = "342"
         """
     )
-    IO.println(errs) >>
-      IO(
-        assert(
-          clue(errs.contains("error"))
-            && clue(errs.contains("""Found:    ("342" : String)"""))
-            && clue(errs.contains("""Required: SproutSubSuite.this.TestSprout""")),
-          clue(errs)
-        )
-      )
+
+    assert(
+      clue(errs.contains("type mismatch"))
+        && clue(errs.contains("found   : String"))
+        && clue(errs.contains("required: SproutSuite.this.TestSprout")),
+      clue = s"""|Actual compiler errors were (sans the -----):
+                 |-----
+                 |$errs
+                 |-----
+                 |""".stripMargin
+    )
+
   }
 
   test("instance of") {
-    IO(assert(ts1.isInstanceOf[String]))
-  }
-
-  test("asignable to base type") {
-    val s: String = ts1
-    IO(assert(s == str1))
+    assert(ts1.isInstanceOf[String], "sprout was not its underlying type")
   }
 
   test("NewType.symbolicName") {
     val nt: NewType[String, TestSprout] = NewType[String, TestSprout]
-    for {
-      _ <- IO(assert(clue(nt.symbolicName) == clue(TestSprout.symbolicName)))
-      _ <- IO(assert(clue(nt.symbolicName) == clue("TestSprout")))
-    } yield ()
-
+    assertEquals(clue(nt.symbolicName), clue(TestSprout.symbolicName))
+    assertEquals(clue(nt.symbolicName), clue("TestSprout"))
   }
 
   test("SproutEq — cats.Eq") {
     val catsEQ = cats.Eq[TestSprout]
-
-    IO(assert(catsEQ.eqv(ts1, ts1)))
+    assert(catsEQ.eqv(ts1, ts1), s"cats.Eq.eqv($ts1, $ts1)")
   }
 
   test("SproutOrder — cats.Order") {
     val catsOrdStr = cats.Order[String]
     val catsOrd    = cats.Order[TestSprout]
 
-    for {
-      _ <- IO(assert(catsOrd.compare(ts1, ts1) == catsOrdStr.compare(str1, str1)))
-      _ <- IO(assert(catsOrd.compare(ts1, ts2) == catsOrdStr.compare(str1, str2)))
-      _ <- IO(assert(catsOrd.compare(ts2, ts1) == catsOrdStr.compare(str2, str1)))
-    } yield ()
+    assertEquals(catsOrd.compare(ts1, ts1), catsOrdStr.compare(str1, str1))
+    assertEquals(catsOrd.compare(ts1, ts2), catsOrdStr.compare(str1, str2))
+    assertEquals(catsOrd.compare(ts2, ts1), catsOrdStr.compare(str2, str1))
   }
 
   test("SproutOrder — scala.math.Ordering") {
     val scalaOrdStr = scala.math.Ordering[String]
     val scalaOrd    = scala.math.Ordering[TestSprout]
 
-    for {
-      _ <- IO(assert(scalaOrd.compare(ts1, ts1) == scalaOrdStr.compare(str1, str1)))
-      _ <- IO(assert(scalaOrd.compare(ts1, ts2) == scalaOrdStr.compare(str1, str2)))
-      _ <- IO(assert(scalaOrd.compare(ts2, ts1) == scalaOrdStr.compare(str2, str1)))
-    } yield ()
+    assertEquals(scalaOrd.compare(ts1, ts1), scalaOrdStr.compare(str1, str1))
+    assertEquals(scalaOrd.compare(ts1, ts2), scalaOrdStr.compare(str1, str2))
+    assertEquals(scalaOrd.compare(ts2, ts1), scalaOrdStr.compare(str2, str1))
   }
 
   test("SproutEq — scala.math.Equiv") {
     val scalaMEquiv = scala.math.Equiv[TestSprout]
-    IO(assert(scalaMEquiv.equiv(ts1, ts1)))
+    assert(scalaMEquiv.equiv(ts1, ts1))
   }
 
   test("SproutEq — scala strictEquality — keep in mind this project is compiled w/ flag -language:strictEquality") {
-    IO(assert(ts1 == ts1))
+    assert(ts1 == ts1)
   }
 
   test("SproutShow") {
     val str  = "testing eq"
     val show = cats.Show[TestSprout]
-    IO(assert(str == show.show(TestSprout(str))))
+    assertEquals(str, show.show(TestSprout(str)))
   }
 
 }
