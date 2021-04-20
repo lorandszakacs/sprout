@@ -31,45 +31,6 @@ final class SproutSuite extends munit.FunSuite {
   private val ts1: TestSprout = TestSprout(str1)
   private val ts2: TestSprout = TestSprout(str2)
 
-  test("compilation — cannot assign TestSprout to String") {
-    val errs = compileErrors(
-      """
-         val s: TestSprout = ???
-         val x: String = s
-        """
-    )
-    assert(
-      clue(errs.contains("type mismatch"))
-        && clue(errs.contains("found   : SproutSuite.this.TestSprout"))
-        && clue(errs.contains("required: String")),
-      clue = s"""|Actual compiler errors were (sans the -----):
-                 |-----
-                 |$errs
-                 |-----
-                 |""".stripMargin
-    )
-  }
-
-  test("compilation — cannot assign String to TestSprout") {
-    val errs = compileErrors(
-      """
-         val s: TestSprout = "342"
-        """
-    )
-
-    assert(
-      clue(errs.contains("type mismatch"))
-        && clue(errs.contains("found   : String"))
-        && clue(errs.contains("required: SproutSuite.this.TestSprout")),
-      clue = s"""|Actual compiler errors were (sans the -----):
-                 |-----
-                 |$errs
-                 |-----
-                 |""".stripMargin
-    )
-
-  }
-
   test("instance of") {
     assert(ts1.isInstanceOf[String], "sprout was not its underlying type")
   }
