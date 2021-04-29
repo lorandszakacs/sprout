@@ -21,9 +21,8 @@ import cats.MonadError
 trait SproutRefined[O, E] extends Burry[O] {
   override opaque type Type = O
 
-  /** By defining this method, you basically refine
-    * the underlying type. Then you can use the
-    * apply, and newType methods to lift
+  /** By defining this method, you basically refine the underlying type. Then you can use the apply, and newType methods
+    * to lift
     */
   def refine[F[_]](o: O)(using m: MonadError[F, E]): F[O]
 

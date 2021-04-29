@@ -16,24 +16,21 @@
 
 package sprout
 
-/** The purpose of this type class is to give further application code
-  * a way to talk about this "new type" encoding. So that converting
-  * to and from the underlying type can be done with as little
-  * boilerplate as possible in inter-op with 3rd party libraries,
-  * and other classes.
+/** The purpose of this type class is to give further application code a way to talk about this "new type" encoding. So
+  * that converting to and from the underlying type can be done with as little boilerplate as possible in inter-op with
+  * 3rd party libraries, and other classes.
   *
-  * @see [[sprout.SproutShow]] as an example. We can easily provide
-  *      a Show instance for N if the underlying representation has
-  *      one. And it's opt in.
+  * @see
+  *   [[sprout.SproutShow]] as an example. We can easily provide a Show instance for N if the underlying representation
+  *   has one. And it's opt in.
   *
-  * This principle is then extended to a host of 3rd party libraries
-  * to eliminate boilerplate. See the sprout-interop github repo
-  * for many other examples.
+  * This principle is then extended to a host of 3rd party libraries to eliminate boilerplate. See the sprout-interop
+  * github repo for many other examples.
   *
   * @tparam O
-  * O for old type. i.e. the underlying runtime type
+  *   O for old type. i.e. the underlying runtime type
   * @tparam N
-  * N for new type. i.e. the type that ought to live only in the compiler
+  *   N for new type. i.e. the type that ought to live only in the compiler
   */
 trait NewType[O, N] extends OldType[O, N] {
   @inline def newType(o: O): N

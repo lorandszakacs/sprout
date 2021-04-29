@@ -21,9 +21,8 @@ import cats.implicits._
 
 trait SproutRefinedSub[O, E] extends Burry[O] with TagSubType[O] {
 
-  /** By defining this method, you basically refine
-    * the underlying type. Then you can use the
-    * apply, and newType methods to lift
+  /** By defining this method, you basically refine the underlying type. Then you can use the apply, and newType methods
+    * to lift
     */
   def refine[F[_]](o: O)(implicit m: MonadError[F, E]): F[O]
 
