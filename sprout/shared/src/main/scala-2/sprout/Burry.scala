@@ -16,12 +16,10 @@
 
 package sprout
 
-/** Helper for various sprout constructors, because going
-  * from your new type to your old type is always the
-  * same.
+/** Helper for various sprout constructors, because going from your new type to your old type is always the same.
   *
-  * This is extremely handy when defining various contravariant
-  * functor typeclasses, e.g. various encoders, ordering, etc.
+  * This is extremely handy when defining various contravariant functor typeclasses, e.g. various encoders, ordering,
+  * etc.
   */
 trait Burry[O] {
   type Type

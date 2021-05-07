@@ -16,9 +16,8 @@
 
 package sprout
 
-/** Intended to be mixed into an object, or in certain cases a class,
-  * for them to act as the containers and constructors for your
-  * new type.
+/** Intended to be mixed into an object, or in certain cases a class, for them to act as the containers and constructors
+  * for your new type.
   *
   * e.g.
   *

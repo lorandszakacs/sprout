@@ -16,24 +16,18 @@
 
 package sprout
 
-/** @see [[sprout.NewType]]
-  * This typeclass is usefull for defining the contravariant
-  * functors. e.g. io.circe.Encoder for your new types.
+/** @see
+  *   [[sprout.NewType]] This typeclass is usefull for defining the contravariant functors. e.g. io.circe.Encoder for
+  *   your new types.
   */
 trait OldType[O, N] {
   @inline def oldType(n: N): O
 
-  /** Ought to be used only for pretty printing and debug messages,
-    * not intented to represent extremly precise and consistent
-    * values that can be relied on in mission critical code
+  /** Ought to be used only for pretty printing and debug messages, not intented to represent extremly precise and
+    * consistent values that can be relied on in mission critical code
     *
     * @return
-    * e.g.
-    * ``
-    *  object TestValue extends Sprout[Int]
-    *  type TestValue = TestValue.Type
-    * ``
-    * returns "TestValue"
+    *   e.g. `` object TestValue extends Sprout[Int] type TestValue = TestValue.Type `` returns "TestValue"
     */
   def symbolicName: String
 }
