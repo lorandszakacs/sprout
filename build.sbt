@@ -11,14 +11,13 @@ Global / onChangedBuildSource := ReloadOnSourceChanges
 
 val Scala212  = "2.12.13"
 val Scala213  = "2.13.5"
-val Scala3RC2 = "3.0.0-RC2"
-val Scala3RC3 = "3.0.0-RC3"
+val Scala3    = "3.0.0"
 
 //=============================================================================
 //============================ publishing details =============================
 //=============================================================================
 
-ThisBuild / baseVersion  := "0.0.3"
+ThisBuild / baseVersion  := "0.0.4"
 ThisBuild / organization := "com.lorandszakacs"
 ThisBuild / homepage     := Option(url("https://github.com/lorandszakacs/sprout"))
 
@@ -56,16 +55,17 @@ ThisBuild / spiewakCiReleaseSnapshots := false
 ThisBuild / spiewakMainBranches       := List("main")
 ThisBuild / Test / publishArtifact    := false
 
-ThisBuild / scalaVersion       := Scala3RC3
-ThisBuild / crossScalaVersions := List(Scala3RC3, Scala3RC2, Scala213, Scala212)
+ThisBuild / scalaVersion       := Scala3
+ThisBuild / crossScalaVersions := List(Scala3, Scala213, Scala212)
 
 //required for binary compat checks
 ThisBuild / versionIntroduced := Map(
   Scala212    -> "0.0.1",
   Scala213    -> "0.0.1",
   "3.0.0-RC1" -> "0.0.1",
-  Scala3RC2   -> "0.0.2",
-  Scala3RC3   -> "0.0.3"
+  "3.0.0-RC2" -> "0.0.2",
+  "3.0.0-RC3" -> "0.0.3",
+  Scala3      -> "0.0.4"
 )
 
 //=============================================================================
