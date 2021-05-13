@@ -2,18 +2,18 @@
 
 ## getting started
 
-This library is published for Scala `3-0-0-RC3`, `3-0-0-RC2`, `2.13`, `2.12`, both on the JVM, and JS platforms.
+This library is published for Scala `3-0-0`, `2.13`, `2.12`, both on the JVM, and JS platforms.
 
 ### sprout
 
 ```scala
-libraryDependencies ++= "com.lorandszakacs" %% "sprout" % "0.0.3"
+libraryDependencies ++= "com.lorandszakacs" %% "sprout" % "0.0.4"
 ```
 
 Depends on:
 
-- [cats-core](https://github.com/typelevel/cats) `2.6.0`
-- [shapeless](https://github.com/milessabin/shapeless/) `2.3.4` — only for Scala 2
+- [cats-core](https://github.com/typelevel/cats) `2.6.1`
+- [shapeless](https://github.com/milessabin/shapeless/) `2.3.6` — only for Scala 2
 
 ### snapshots
 
