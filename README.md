@@ -2,7 +2,7 @@
 
 ## getting started
 
-This library is published for Scala `3-0-0`, `2.13`, `2.12`, both on the JVM, and JS platforms.
+This library is published for Scala `3.0.0`, `2.13`, `2.12`, both on the JVM, and JS platforms.
 
 ### sprout
 
