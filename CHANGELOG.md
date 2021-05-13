@@ -19,7 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### dependency upgrades
 
 - [cats-core](https://github.com/typelevel/cats) `2.6.1`
-- [shapeless](https://github.com/milessabin/shapeless) `2.4.0` — only used for Scala 2
+- [shapeless](https://github.com/milessabin/shapeless) `2.3.6` — only used for Scala 2
 - [munit](https://github.com/scalameta/munit/releases) `0.7.26`
 
 # 0.0.3
