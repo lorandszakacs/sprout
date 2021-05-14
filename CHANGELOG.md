@@ -15,8 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### dropped scala versions:
 
-- `3.0.0-RC1`
 - `3.0.0-RC2`
+- `3.0.0-RC3`
 
 ### dependency upgrades
 
