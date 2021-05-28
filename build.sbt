@@ -9,7 +9,7 @@ addCommandAlias("format", ";scalafmtSbt;scalafmtConfig;scalafmtAll")
 
 Global / onChangedBuildSource := ReloadOnSourceChanges
 
-val Scala212 = "2.12.13"
+val Scala212 = "2.12.14"
 val Scala213 = "2.13.5"
 val Scala3   = "3.0.0"
 
