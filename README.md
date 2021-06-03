@@ -7,13 +7,13 @@ This library is published for Scala `3.0.0`, `2.13`, `2.12`, both on the JVM, an
 ### sprout
 
 ```scala
-libraryDependencies ++= "com.lorandszakacs" %% "sprout" % "0.0.4"
+libraryDependencies += "com.lorandszakacs" %% "sprout" % "0.0.5"
 ```
 
 Depends on:
 
 - [cats-core](https://github.com/typelevel/cats) `2.6.1`
-- [shapeless](https://github.com/milessabin/shapeless/) `2.3.6` — only for Scala 2
+- [shapeless](https://github.com/milessabin/shapeless/) `2.3.7` — only for Scala 2
 
 ### snapshots
 

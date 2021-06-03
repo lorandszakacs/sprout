@@ -17,7 +17,7 @@ val Scala3   = "3.0.0"
 //============================ publishing details =============================
 //=============================================================================
 
-ThisBuild / baseVersion  := "0.0.4"
+ThisBuild / baseVersion  := "0.0.5"
 ThisBuild / organization := "com.lorandszakacs"
 ThisBuild / homepage     := Option(url("https://github.com/lorandszakacs/sprout"))
 
