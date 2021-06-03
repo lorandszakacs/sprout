@@ -89,7 +89,6 @@ lazy val root = project
 
 lazy val sprout = crossProject(JSPlatform, JVMPlatform)
   .settings(commonSettings)
-  .settings(dottyJsSettings(ThisBuild / crossScalaVersions))
   .jsSettings(
     scalaJSLinkerConfig ~= (_.withModuleKind(ModuleKind.CommonJSModule))
   )
