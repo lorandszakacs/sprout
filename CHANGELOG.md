@@ -7,7 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 # unreleased
 
-### 0.0.4
+### dependency upgrades
+
+- [shapeless](https://github.com/milessabin/shapeless) `2.3.7` — only used for Scala 2
+
+### internals:
+
+- bump sbt to `1.5.3`
+- bump Scala to `2.13.6` and `2.12.14` respectively
+- bump `sbt-spiewak` to `0.21.0`
+
+# 0.0.4
 
 ### new scala versions:
 
