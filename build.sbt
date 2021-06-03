@@ -9,8 +9,8 @@ addCommandAlias("format", ";scalafmtSbt;scalafmtConfig;scalafmtAll")
 
 Global / onChangedBuildSource := ReloadOnSourceChanges
 
-val Scala212 = "2.12.13"
-val Scala213 = "2.13.5"
+val Scala212 = "2.12.14"
+val Scala213 = "2.13.6"
 val Scala3   = "3.0.0"
 
 //=============================================================================
@@ -62,9 +62,6 @@ ThisBuild / crossScalaVersions := List(Scala3, Scala213, Scala212)
 ThisBuild / versionIntroduced := Map(
   Scala212    -> "0.0.1",
   Scala213    -> "0.0.1",
-  "3.0.0-RC1" -> "0.0.1",
-  "3.0.0-RC2" -> "0.0.2",
-  "3.0.0-RC3" -> "0.0.3",
   Scala3      -> "0.0.4"
 )
 
