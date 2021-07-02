@@ -70,7 +70,7 @@ ThisBuild / versionIntroduced := Map(
 //=============================================================================
 // format: off
 val catsV        = "2.6.1"      // https://github.com/typelevel/cats/releases
-val munitV       = "0.7.26"     // https://github.com/scalameta/munit/releases
+val munitV       = "0.7.27"     // https://github.com/scalameta/munit/releases
 val shapelessV   = "2.3.7"      // https://github.com/milessabin/shapeless/releases
 // format: on
 
