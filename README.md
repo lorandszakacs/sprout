@@ -1,5 +1,7 @@
 # sprout
 
+:warning: sprout is no longer maintained. Use [monix-newtypes](https://github.com/monix/newtypes) instead. The encodings and rationale behind the two libraries are nearly identical. Most transitions from sprout to monix-newtypes are search+replaces :seedling:
+
 ## getting started
 
 This library is published for Scala `3.0.0`, `2.13`, `2.12`, both on the JVM, and JS platforms.
